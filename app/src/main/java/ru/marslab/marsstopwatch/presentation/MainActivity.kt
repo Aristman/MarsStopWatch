@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import org.koin.android.ext.android.inject
 import ru.marslab.marsstopwatch.databinding.ActivityMainBinding
 
+private const val TIMER_ONE = 0
+private const val TIMER_TWO = 1
+
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy {
@@ -21,10 +24,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        mainViewModel.ticker[0].observe(this) {
+        mainViewModel.ticker[TIMER_ONE].observe(this) {
             binding.textTimeOne.text = it
         }
-        mainViewModel.ticker[1].observe(this) {
+        mainViewModel.ticker[TIMER_TWO].observe(this) {
             binding.textTimeTwo.text = it
         }
     }
@@ -32,22 +35,22 @@ class MainActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.run {
             buttonStartOne.setOnClickListener {
-                mainViewModel.timerStart(1)
+                mainViewModel.timerStart(TIMER_ONE)
             }
             buttonPauseOne.setOnClickListener {
-                mainViewModel.timerPause(1)
+                mainViewModel.timerPause(TIMER_ONE)
             }
             buttonStopOne.setOnClickListener {
-                mainViewModel.timerStop(1)
+                mainViewModel.timerStop(TIMER_ONE)
             }
             buttonStartTwo.setOnClickListener {
-                mainViewModel.timerStart(2)
+                mainViewModel.timerStart(TIMER_TWO)
             }
             buttonPauseTwo.setOnClickListener {
-                mainViewModel.timerPause(2)
+                mainViewModel.timerPause(TIMER_TWO)
             }
             buttonStopTwo.setOnClickListener {
-                mainViewModel.timerStop(2)
+                mainViewModel.timerStop(TIMER_TWO)
             }
         }
     }

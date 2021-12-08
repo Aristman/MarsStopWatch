@@ -12,35 +12,41 @@ import ru.marslab.marsstopwatch.domain.StopwatchListOrchestrator
 import ru.marslab.marsstopwatch.domain.StopwatchStateCalculator
 import ru.marslab.marsstopwatch.domain.TimestampProvider
 
+private const val COUNT_TIMERS = 2
+
 class MainViewModel(
     timestampProvider: TimestampProvider
 ) : ViewModel() {
     private val stopwatchListOrchestrator: List<StopwatchListOrchestrator> =
-        (0..1).map {
-            StopwatchListOrchestrator(
-                StopwatchStateHolder(
-                    StopwatchStateCalculator(
-                        timestampProvider,
-                        ElapsedTimeCalculator(timestampProvider)
-                    ),
-                    ElapsedTimeCalculator(timestampProvider),
-                    TimestampMillisecondsFormatter()
-                ),
-                CoroutineScope(Dispatchers.Main + SupervisorJob())
-            )
-        }
+        mutableListOf<StopwatchListOrchestrator>().apply {
+            repeat(COUNT_TIMERS) {
+                add(
+                    StopwatchListOrchestrator(
+                        StopwatchStateHolder(
+                            StopwatchStateCalculator(
+                                timestampProvider,
+                                ElapsedTimeCalculator(timestampProvider)
+                            ),
+                            ElapsedTimeCalculator(timestampProvider),
+                            TimestampMillisecondsFormatter()
+                        ),
+                        CoroutineScope(Dispatchers.Main + SupervisorJob())
+                    )
+                )
+            }
+        }.toList()
 
     val ticker: List<LiveData<String>> = stopwatchListOrchestrator.map { it.ticker.asLiveData() }
 
     fun timerStart(timer: Int) {
-        stopwatchListOrchestrator[timer - 1].start()
+        stopwatchListOrchestrator[timer].start()
     }
 
     fun timerPause(timer: Int) {
-        stopwatchListOrchestrator[timer - 1].pause()
+        stopwatchListOrchestrator[timer].pause()
     }
 
     fun timerStop(timer: Int) {
-        stopwatchListOrchestrator[timer - 1].stop()
+        stopwatchListOrchestrator[timer].stop()
     }
 }
