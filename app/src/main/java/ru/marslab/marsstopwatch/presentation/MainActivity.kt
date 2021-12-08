@@ -21,21 +21,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        mainViewModel.ticker.observe(this) {
-            binding.textTime.text = it
+        mainViewModel.ticker[0].observe(this) {
+            binding.textTimeOne.text = it
+        }
+        mainViewModel.ticker[1].observe(this) {
+            binding.textTimeTwo.text = it
         }
     }
 
     private fun initListeners() {
         binding.run {
-            buttonStart.setOnClickListener {
-                mainViewModel.timerStart()
+            buttonStartOne.setOnClickListener {
+                mainViewModel.timerStart(1)
             }
-            buttonPause.setOnClickListener {
-                mainViewModel.timerPause()
+            buttonPauseOne.setOnClickListener {
+                mainViewModel.timerPause(1)
             }
-            buttonStop.setOnClickListener {
-                mainViewModel.timerStop()
+            buttonStopOne.setOnClickListener {
+                mainViewModel.timerStop(1)
+            }
+            buttonStartTwo.setOnClickListener {
+                mainViewModel.timerStart(2)
+            }
+            buttonPauseTwo.setOnClickListener {
+                mainViewModel.timerPause(2)
+            }
+            buttonStopTwo.setOnClickListener {
+                mainViewModel.timerStop(2)
             }
         }
     }
